@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Запис на шиномонтаж</title>
+    <style>
+        /* Ваші стилі залишається незмінними */
+    </style>
+</head>
+<body>
+
+    <h2>Запис на шиномонтаж</h2>
+
+    <form id="appointmentForm">
+        <!-- Ваші поля форми залишається незмінними -->
+
+        <button type="button" onclick="submitForm()">Записатися</button>
+    </form>
+
+    <script>
+        function submitForm() {
+            const form = document.getElementById('appointmentForm');
+            const formData = new FormData(form);
+            const wheelRadius = formData.get('wheelRadius');
+
+            let price;
+            switch (wheelRadius) {
+                case '16':
+                    price = 600;
+                    break;
+                case '17':
+                    price = 700;
+                    break;
+                case '18':
+                    price = 800;
+                    break;
+                default:
+                    price = 0;
+                    break;
+            }
+
+            alert(`Запис успішно відправлено!\nВартість робіт: ${price} грн`);
+
+            // Відправити дані в Телеграм
+            const botToken = '6753867616:AAHSXNf8GWffr6KwdRmJXV5Q8f3DY2w4nZo'; // Замініть на свій токен бота
+            const chatId = 'https://t.me/gweelssss'; // Замініть на свій ідентифікатор групи
+
+            const message = `
+                Новий запис на шиномонтаж:
+                Ім'я: ${formData.get('name')}
+                Телефон: ${formData.get('phone')}
+                Дата та час: ${formData.get('date')}
+                Радіус колеса: ${wheelRadius}
+                Вартість робіт: ${price} грн
+            `;
+
+            const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+            
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.send();
+
+            form.reset();
+        }
+    </script>
+
+</body>
+</html>
